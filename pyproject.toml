@@ -32,6 +32,16 @@ dependencies = [
     "numpy>=1.20.0",
 ]
 
+[project.optional-dependencies]
+# `pip install "laya[serve]"` then `uvicorn laya.server:app` -- see docs/API.md
+serve = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.0",
+]
+# tests/test_server.py drives the app through fastapi's TestClient, which needs an http client
+test = ["httpx>=0.27"]
+
 [tool.setuptools]
 # assets/, research/ and notebooks/ sit in the root, so auto-discovery bails out.
 packages = ["laya"]

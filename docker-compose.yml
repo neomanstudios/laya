@@ -1,0 +1,26 @@
+# docker compose up  ->  http://localhost:8000/docs
+services:
+  laya:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Build these checkpoints at startup so no request ever waits for a download. Each is
+      # ~1.3-1.7 GB, so drop to "english" if that is all you serve, or "" to load lazily.
+      LAYA_PRELOAD: "english,multilingual"
+      # LAYA_DEVICE: "cuda"           # empty picks the best device available
+      # LAYA_API_KEY: "change-me"     # when set, /v1/* requires it in the X-API-Key header
+      HF_TOKEN: "${HF_TOKEN:-}"
+    volumes:
+      # keep downloaded checkpoints across restarts and rebuilds
+      - laya-models:/models
+    restart: unless-stopped
+    # GPU: build with TORCH_INDEX_URL=https://download.pytorch.org/whl/cu124, then uncomment
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [gpu]
+
+volumes:
+  laya-models:
