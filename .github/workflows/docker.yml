@@ -13,7 +13,11 @@ name: Docker image
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      # Publishes from this branch too, so the image reaches the registry before the branch
+      # merges. Delete this line once it has: after that, main is what :latest should mean.
+      - claude/laya-docker-api-swagger-z2o7j5
   pull_request:
     # On a pull request the image is built and tested but never pushed, so a broken Dockerfile
     # is caught before main. Only when something that goes into the image changed.
