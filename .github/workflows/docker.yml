@@ -8,16 +8,12 @@ name: Docker image
 # For Docker Hub instead, set REGISTRY to docker.io, use <user>/laya as the image name, and
 # log in with secrets.DOCKERHUB_USERNAME / secrets.DOCKERHUB_TOKEN.
 #
-# A new package is private; make it public under the repository's Packages settings if anyone
-# should be able to pull it without a token.
+# Anonymous `docker pull` needs the package to be public: check its visibility under the
+# repository's Packages settings.
 
 on:
   push:
-    branches:
-      - main
-      # Publishes from this branch too, so the image reaches the registry before the branch
-      # merges. Delete this line once it has: after that, main is what :latest should mean.
-      - claude/laya-docker-api-swagger-z2o7j5
+    branches: [main]
   pull_request:
     # On a pull request the image is built and tested but never pushed, so a broken Dockerfile
     # is caught before main. Only when something that goes into the image changed.

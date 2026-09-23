@@ -51,6 +51,12 @@ docker run --rm --gpus all -p 8000:8000 -v laya-models:/models laya-api:gpu
 The first request for a checkpoint downloads it (~1.3–1.7 GB) and can take minutes. Set
 `LAYA_PRELOAD` to pay that at startup instead, so no request ever waits.
 
+**On a container platform** (Azure Container Apps, Cloud Run, Kubernetes, ...) the app listens on
+**port 8000**: point the ingress target port there, and the health probes at `GET /health` on
+8000. With `LAYA_PRELOAD` set the port only opens once the checkpoints are built, so give the
+startup probe a window of several minutes. Mount a volume at `/models` or every restart
+downloads the checkpoints again.
+
 ---
 
 ## First call
