@@ -218,6 +218,9 @@ point any client generator at it.
 | `GET /v1/models` · `GET /v1/presets` | what this server can serve |
 | `GET /health` | liveness, version, device, resident checkpoints |
 
+Prebuilt image: `docker run -p 8000:8000 ghcr.io/<owner>/laya:latest` -- every commit on
+`main` is published to GHCR as `:latest` and as its commit sha.
+
 Without Docker: `pip install "laya[serve]"` then `uvicorn laya.server:app --port 8000`.
 GPU, preloading, API keys and the full request and response reference: **[`docs/API.md`](docs/API.md)**.
 

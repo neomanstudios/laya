@@ -12,6 +12,15 @@ internet use `/openapi.json` in a viewer of your own; the API itself is unaffect
 
 ## Run it
 
+**Published image** — every commit on `main` is built, smoke-tested and pushed to GHCR by
+[`.github/workflows/docker.yml`](../.github/workflows/docker.yml), tagged `:latest` and with
+its commit sha. `<owner>` is whoever's repository runs that workflow:
+
+```bash
+docker run --rm -p 8000:8000 -v laya-models:/models ghcr.io/<owner>/laya:latest
+docker run --rm -p 8000:8000 -v laya-models:/models ghcr.io/<owner>/laya:2b1f9c4...   # pin a build
+```
+
 **Docker Compose** — one command, checkpoints cached in a volume:
 
 ```bash
