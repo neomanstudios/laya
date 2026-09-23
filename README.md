@@ -191,6 +191,41 @@ print("Churn Risk :", answers["churn_risk"]["noul"])       # -> 0.892 (89.2% pro
 
 ---
 
+## Serve as an HTTP API (Docker + Swagger)
+
+Any language can call Laya over JSON. The server holds one `Router`, so checkpoints load once
+and every request is routed and answered on a warm model.
+
+```bash
+docker compose up          # then open http://localhost:8000/docs
+```
+
+```bash
+curl -X POST http://localhost:8000/v1/predict -H 'content-type: application/json' -d '{
+  "state": {"body": "Мне дважды списали деньги, верните средства сегодня"},
+  "preset": "triage"}'
+# routed to multilingual: intent=refund, refund_requested=0.865, frustration=2.07/3
+```
+
+Interactive **Swagger UI at `/docs`**, ReDoc at `/redoc`, OpenAPI 3.1 at `/openapi.json` --
+point any client generator at it.
+
+| | |
+|---|---|
+| `POST /v1/predict` | typed questions about one state (`questions` or a `preset`) |
+| `POST /v1/email` | same, after stripping quoted replies, signatures and disclaimers |
+| `POST /v1/route` · `POST /v1/detect` | which checkpoint would answer, and why -- no model run |
+| `GET /v1/models` · `GET /v1/presets` | what this server can serve |
+| `GET /health` | liveness, version, device, resident checkpoints |
+
+Prebuilt image: `docker run -p 8000:8000 ghcr.io/<owner>/laya:latest` -- every commit on
+`main` is published to GHCR as `:latest` and as its commit sha.
+
+Without Docker: `pip install "laya[serve]"` then `uvicorn laya.server:app --port 8000`.
+GPU, preloading, API keys and the full request and response reference: **[`docs/API.md`](docs/API.md)**.
+
+---
+
 ## Automated Confidence Gating
 
 Because Laya's probabilities are trained with strictly proper scoring rules (RLCD), confidence scores are statistically meaningful:
